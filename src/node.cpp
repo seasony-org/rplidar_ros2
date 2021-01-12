@@ -223,7 +223,7 @@ int main(int argc, char * argv[]) {
     node->get_parameter_or("tcp_port", tcp_port, 20108);
     node->get_parameter_or("serial_port", serial_port, std::string("/dev/ttyUSB0"));
     node->get_parameter_or("serial_baudrate", serial_baudrate, 115200);
-    node->get_parameter_or("frame_id", frame_id, std::string("laser_frame"));
+    node->get_parameter_or("frame_id", frame_id, std::string("hokuyo_link"));
     node->get_parameter_or("inverted", inverted, false);
     node->get_parameter_or("angle_compensate", angle_compensate, false);
     node->get_parameter_or("scan_mode", scan_mode, std::string());

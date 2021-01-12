@@ -47,7 +47,7 @@ rplidar_node::rplidar_node(const rclcpp::NodeOptions & options)
   tcp_port_ = this->declare_parameter("tcp_port", 20108);
   serial_port_ = this->declare_parameter("serial_port", "/dev/ttyUSB0");
   serial_baudrate_ = this->declare_parameter("serial_baudrate", 115200);
-  frame_id_ = this->declare_parameter("frame_id", std::string("laser_frame"));
+  frame_id_ = this->declare_parameter("frame_id", std::string("hokuyo_link"));
   inverted_ = this->declare_parameter("inverted", false);
   angle_compensate_ = this->declare_parameter("angle_compensate", false);
   scan_mode_ = this->declare_parameter("scan_mode", std::string());
