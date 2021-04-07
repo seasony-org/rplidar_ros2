@@ -33,6 +33,7 @@
  */
 
 #pragma once
+#include <rclcpp/clock.hpp>
 
 namespace rp { namespace standalone{ namespace rplidar {
     class RPlidarDriverImplCommon : public RPlidarDriver
@@ -75,6 +76,7 @@ public:
     virtual u_result stop(_u32 timeout = DEFAULT_TIMEOUT);
     virtual u_result grabScanData(rplidar_response_measurement_node_t * nodebuffer, size_t & count, _u32 timeout = DEFAULT_TIMEOUT);
     virtual u_result grabScanDataHq(rplidar_response_measurement_node_hq_t * nodebuffer, size_t & count, _u32 timeout = DEFAULT_TIMEOUT);
+    virtual u_result grabScanDataHqMod(rplidar_response_measurement_node_hq_t * nodebuffer, size_t & count, rclcpp::Clock::SharedPtr clock, _u32 timeout = DEFAULT_TIMEOUT);
     virtual u_result ascendScanData(rplidar_response_measurement_node_t * nodebuffer, size_t count);
     virtual u_result ascendScanData(rplidar_response_measurement_node_hq_t * nodebuffer, size_t count);
     virtual u_result getScanDataWithInterval(rplidar_response_measurement_node_t * nodebuffer, size_t & count);

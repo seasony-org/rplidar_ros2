@@ -45,7 +45,7 @@ rplidar_node::rplidar_node(const rclcpp::NodeOptions & options)
   channel_type_ = this->declare_parameter("channel_type", "serial");
   tcp_ip_ = this->declare_parameter("tcp_ip", "192.168.0.7");
   tcp_port_ = this->declare_parameter("tcp_port", 20108);
-  serial_port_ = this->declare_parameter("serial_port", "/dev/ttyUSB0");
+  serial_port_ = this->declare_parameter("serial_port", "/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0");
   serial_baudrate_ = this->declare_parameter("serial_baudrate", 115200);
   frame_id_ = this->declare_parameter("frame_id", std::string("hokuyo_link"));
   inverted_ = this->declare_parameter("inverted", false);
@@ -328,8 +328,8 @@ void rplidar_node::publish_loop()
   start_scan_time = this->now();
   op_result = m_drv->grabScanDataHq(nodes.get(), count);
   end_scan_time = this->now();
+  
   double scan_duration = (end_scan_time - start_scan_time).nanoseconds() * 1E-9;
-
   if (op_result != RESULT_OK) {
     return;
   }

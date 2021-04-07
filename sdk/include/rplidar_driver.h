@@ -33,6 +33,7 @@
  */
 
 #pragma once
+#include <rclcpp/clock.hpp>
 
 
 #ifndef __cplusplus
@@ -286,6 +287,7 @@ public:
     ///
     /// \The caller application can set the timeout value to Zero(0) to make this interface always returns immediately to achieve non-block operation.
     virtual u_result grabScanDataHq(rplidar_response_measurement_node_hq_t * nodebuffer, size_t & count, _u32 timeout = DEFAULT_TIMEOUT) = 0;
+    virtual u_result grabScanDataHqMod(rplidar_response_measurement_node_hq_t * nodebuffer, size_t & count, rclcpp::Clock::SharedPtr clock, _u32 timeout = DEFAULT_TIMEOUT) = 0;
 
     /// Ascending the scan data according to the angle value in the scan.
     ///

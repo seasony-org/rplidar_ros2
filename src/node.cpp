@@ -112,8 +112,9 @@ void publish_scan(std::shared_ptr<rclcpp::Publisher<sensor_msgs::msg::LaserScan>
             scan_msg.intensities[node_count-1-i] = (float) (nodes[i].quality >> 2);
         }
     }
-
-    pub->publish(scan_msg);
+    if(scan_msg.time_increment < 0.32 && scan_msg.time_increment > 0.21){
+        pub->publish(scan_msg);
+    }
 }
 
 bool getRPLIDARDeviceInfo(RPlidarDriver * drv)
@@ -195,6 +196,7 @@ int main(int argc, char * argv[]) {
     rclcpp::init(argc, argv);
     auto node = rclcpp::Node::make_shared("rplidar_node");
     /* connect to ROS clock */
+    
     rclcpp::Clock::SharedPtr clock;
     rclcpp::TimeSource timesource;
     clock = std::make_shared<rclcpp::Clock>(RCL_ROS_TIME);
@@ -221,11 +223,11 @@ int main(int argc, char * argv[]) {
     node->get_parameter_or("channel_type", channel_type, std::string("serial"));
     node->get_parameter_or("tcp_ip", tcp_ip, std::string("192.168.0.7"));
     node->get_parameter_or("tcp_port", tcp_port, 20108);
-    node->get_parameter_or("serial_port", serial_port, std::string("/dev/ttyUSB0"));
+    node->get_parameter_or("serial_port", serial_port, std::string("/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0"));
     node->get_parameter_or("serial_baudrate", serial_baudrate, 115200);
     node->get_parameter_or("frame_id", frame_id, std::string("hokuyo_link"));
     node->get_parameter_or("inverted", inverted, false);
-    node->get_parameter_or("angle_compensate", angle_compensate, false);
+    node->get_parameter_or("angle_compensate", angle_compensate, true);
     node->get_parameter_or("scan_mode", scan_mode, std::string());
 
     ROS_INFO("RPLIDAR running on ROS package rplidar_ros. SDK Version:"RPLIDAR_SDK_VERSION"");
@@ -340,10 +342,10 @@ int main(int argc, char * argv[]) {
         size_t   count = _countof(nodes);
 
         start_scan_time = clock->now();
-        op_result = drv->grabScanDataHq(nodes, count);
+        op_result = drv->grabScanDataHqMod(nodes, count, clock, 120);
         end_scan_time = clock->now();
-        scan_duration = (end_scan_time - start_scan_time).nanoseconds() * 1E-9;
-
+        scan_duration = (end_scan_time - start_scan_time).nanoseconds() / 1000000;
+        RCLCPP_INFO(node->get_logger(), "scan time: %f", scan_duration);
         if (op_result == RESULT_OK) {
             op_result = drv->ascendScanData(nodes, count);
             float angle_min = DEG2RAD(0.0f);
