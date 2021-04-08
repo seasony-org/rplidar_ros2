@@ -112,8 +112,8 @@ void publish_scan(std::shared_ptr<rclcpp::Publisher<sensor_msgs::msg::LaserScan>
             scan_msg.intensities[node_count-1-i] = (float) (nodes[i].quality >> 2);
         }
     }
-    if(scan_msg.time_increment < 0.32 && scan_msg.time_increment > 0.21){
-        pub->publish(scan_msg);
+    if(scan_msg.time_increment < 0.3 && scan_msg.time_increment > 0.19){
+         pub->publish(scan_msg);
     }
 }
 
@@ -345,7 +345,7 @@ int main(int argc, char * argv[]) {
         op_result = drv->grabScanDataHqMod(nodes, count, clock, 120);
         end_scan_time = clock->now();
         scan_duration = (end_scan_time - start_scan_time).nanoseconds() / 1000000;
-        RCLCPP_INFO(node->get_logger(), "scan time: %f", scan_duration);
+        ///RCLCPP_INFO(node->get_logger(), "scan time: %f", scan_duration);
         if (op_result == RESULT_OK) {
             op_result = drv->ascendScanData(nodes, count);
             float angle_min = DEG2RAD(0.0f);
@@ -357,7 +357,7 @@ int main(int argc, char * argv[]) {
                     int angle_compensate_offset = 0;
                     rplidar_response_measurement_node_hq_t angle_compensate_nodes[angle_compensate_nodes_count];
                     memset(angle_compensate_nodes, 0, angle_compensate_nodes_count*sizeof(rplidar_response_measurement_node_hq_t));
-
+                    
                     int i = 0, j = 0;
                     for( ; i < count; i++ ) {
                         if (nodes[i].dist_mm_q2 != 0) {
@@ -369,7 +369,8 @@ int main(int argc, char * argv[]) {
                             }
                         }
                     }
-
+                    
+                    
                     publish_scan(scan_pub, angle_compensate_nodes, angle_compensate_nodes_count,
                              start_scan_time, scan_duration, inverted,
                              angle_min, angle_max, max_distance,

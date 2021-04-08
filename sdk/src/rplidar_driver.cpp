@@ -1849,14 +1849,14 @@ u_result RPlidarDriverImplCommon::grabScanDataHq(rplidar_response_measurement_no
 
 u_result RPlidarDriverImplCommon::grabScanDataHqMod(rplidar_response_measurement_node_hq_t * nodebuffer, size_t & count, rclcpp::Clock::SharedPtr clock, _u32 timeout)
 {
-    std::cout << "----------"  << std::endl;
+    //std::cout << "----------"  << std::endl;
     rclcpp::Time start_wait = clock->now();
     //lower timeout??
     switch (_dataEvt.wait(timeout))
     {
     case rp::hal::Event::EVENT_TIMEOUT:
         count = 0;
-        std::cout << "EVENT_TIMEOUT"  << std::endl;
+        //std::cout << "EVENT_TIMEOUT"  << std::endl;
 
         return RESULT_OPERATION_TIMEOUT;
     case rp::hal::Event::EVENT_OK:
@@ -1866,28 +1866,28 @@ u_result RPlidarDriverImplCommon::grabScanDataHqMod(rplidar_response_measurement
         if (wait_duration < 70.00) {
             return RESULT_OPERATION_TIMEOUT;
         }
-        std::cout << wait_duration << " wait time" << std::endl;
-        std::cout << "EVENT_OK"  << std::endl;
+        //std::cout << wait_duration << " wait time" << std::endl;
+        //std::cout << "EVENT_OK"  << std::endl;
         if (_cached_scan_node_hq_count == 0) return RESULT_OPERATION_TIMEOUT; //consider as timeout
-        rclcpp::Time start_lock = clock->now();
+        //rclcpp::Time start_lock = clock->now();
         rp::hal::AutoLocker l(_lock);
-        rclcpp::Time end_lock = clock->now();
-        double lock_duration = (end_lock - start_lock).nanoseconds() / 1000000.0;
-        std::cout << lock_duration << " lock time" << std::endl;
+        //rclcpp::Time end_lock = clock->now();
+        //double lock_duration = (end_lock - start_lock).nanoseconds() / 1000000.0;
+        //std::cout << lock_duration << " lock time" << std::endl;
 
-        rclcpp::Time start_size = clock->now();
+        //rclcpp::Time start_size = clock->now();
         size_t size_to_copy = min(count, _cached_scan_node_hq_count);
-        rclcpp::Time end_size = clock->now();
-        double s_dur = (end_size - start_size).nanoseconds() / 1000000.0;
-        std::cout << s_dur << " start time" << std::endl;
+        //rclcpp::Time end_size = clock->now();
+        //double s_dur = (end_size - start_size).nanoseconds() / 1000000.0;
+        //std::cout << s_dur << " start time" << std::endl;
         
-        rclcpp::Time start_copy = clock->now();
+        //rclcpp::Time start_copy = clock->now();
         memcpy(nodebuffer, _cached_scan_node_hq_buf, size_to_copy * sizeof(rplidar_response_measurement_node_hq_t));
-        rclcpp::Time end_copy = clock->now();
-        double copy_duration = (end_copy - start_copy).nanoseconds() / 1000000.0;
-        std::cout << copy_duration << " copy time" << std::endl;
-        double total = lock_duration + s_dur + copy_duration;
-        std::cout << total << " total time" << std::endl;
+        //rclcpp::Time end_copy = clock->now();
+        //double copy_duration = (end_copy - start_copy).nanoseconds() / 1000000.0;
+        //std::cout << copy_duration << " copy time" << std::endl;
+        //double total = lock_duration + s_dur + copy_duration;
+        //std::cout << total << " total time" << std::endl;
         count = size_to_copy;
         _cached_scan_node_hq_count = 0;
     }
@@ -1895,7 +1895,7 @@ u_result RPlidarDriverImplCommon::grabScanDataHqMod(rplidar_response_measurement
 
     default:
         count = 0;
-        std::cout << "OP_FAIL"  << std::endl;
+        //std::cout << "OP_FAIL"  << std::endl;
         return RESULT_OPERATION_FAIL;
     }
 }
