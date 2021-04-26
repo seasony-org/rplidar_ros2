@@ -217,7 +217,7 @@ int main(int argc, char * argv[]) {
     // auto scan_pub = nh.advertise<sensor_msgs::msg::LaserScan>("scan", 1000);
 
     /* scan publisher */
-    auto scan_pub = node->create_publisher<sensor_msgs::msg::LaserScan>("scan", 10);
+    auto scan_pub = node->create_publisher<sensor_msgs::msg::LaserScan>("scan_1", 10);
 
     /* set parameters */
     node->get_parameter_or("channel_type", channel_type, std::string("serial"));
@@ -225,7 +225,7 @@ int main(int argc, char * argv[]) {
     node->get_parameter_or("tcp_port", tcp_port, 20108);
     node->get_parameter_or("serial_port", serial_port, std::string("/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0"));
     node->get_parameter_or("serial_baudrate", serial_baudrate, 115200);
-    node->get_parameter_or("frame_id", frame_id, std::string("hokuyo_link"));
+    node->get_parameter_or("frame_id", frame_id, std::string("hokuyo_link_1"));
     node->get_parameter_or("inverted", inverted, false);
     node->get_parameter_or("angle_compensate", angle_compensate, true);
     node->get_parameter_or("scan_mode", scan_mode, std::string());
